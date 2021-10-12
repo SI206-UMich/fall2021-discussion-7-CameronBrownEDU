@@ -1,5 +1,6 @@
 import re
 import os
+import io
 import unittest
 
 def read_file(filename):
@@ -8,7 +9,7 @@ def read_file(filename):
     # Open the file and get the file object
     source_dir = os.path.dirname(__file__) #<-- directory name
     full_path = os.path.join(source_dir, filename)
-    infile = open(full_path,'r', encoding='utf-8')
+    infile = io.open(full_path,'r', encoding='utf-8')
     
     # Read the lines from the file object into a list
     lines = infile.readlines()
@@ -22,6 +23,11 @@ def read_file(filename):
 def find_word(string_list):
     """ Return a list of words that contain three digit numbers in the middle. """
 
+    words = []
+    threedigits = "[a-z]+\d\d\d[a-z]\S*"
+    for each in string_list:
+        for found in re.search(threedigits, each):
+            words.append(found)
     # initialize an empty list
 
     # define the regular expression
@@ -32,13 +38,21 @@ def find_word(string_list):
     
     # loop through the found words and add the words to your empty list 
 
-    #return the list of all words that start with the letter B, E, or T
-    pass
+    #return the list of all words that start with the letter B, E, or T???
+    return words
 
 
 def find_days(string_list):
     """ Return a list of days from the list of strings the dates format in the text are MM/DD/YYYY. """  
 
+    days = []
+    date = "\d+\/\d+\/\d{4}"
+    day = "^\d+"
+    for line in string_list:
+        check = re.search(date, line)
+        if check is not None:
+            days.append(re.search(day,check).group(0))
+    return days
     # initialize an empty list
 
     # define the regular expression
@@ -50,11 +64,20 @@ def find_days(string_list):
     # loop through the found dates and only add the days to your empty list 
     
     #return the list of days
-    pass
 
 def find_domains(string_list):
     """ Return a list of web address domains from the list of strings the domains of a wbsite are after www. """
 
+
+    domains = []
+    domreg = "[a-z]+:\/\/\S+[a-z]"
+
+    for line in string_list:
+        check = re.search(domreg, line)
+        if check is not None:
+            transfer = check.group(0)
+            domains.append(transfer.split("//")[1])
+    return domains    
     # initialize an empty list
 
     # define the regular expression
@@ -71,7 +94,6 @@ def find_domains(string_list):
     # add the domains to your empty list
     
     #return the list of domains
-    pass
 
 class TestAllMethods(unittest.TestCase):
 
