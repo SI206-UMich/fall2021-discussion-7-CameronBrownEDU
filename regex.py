@@ -26,7 +26,7 @@ def find_word(string_list):
     words = []
     threedigits = "[a-z]+\d\d\d[a-z]\S*"
     for each in string_list:
-        for found in re.search(threedigits, each):
+        for found in re.findall(threedigits, each):
             words.append(found)
     # initialize an empty list
 
@@ -46,12 +46,13 @@ def find_days(string_list):
     """ Return a list of days from the list of strings the dates format in the text are MM/DD/YYYY. """  
 
     days = []
-    date = "\d+\/\d+\/\d{4}"
+    date = "\d+\/(\d+)\/\d{4}"
     day = "^\d+"
     for line in string_list:
-        check = re.search(date, line)
-        if check is not None:
-            days.append(re.search(day,check).group(0))
+        check = re.findall(date, line)
+        if check != None:
+            for each in check:
+                days.append(each)
     return days
     # initialize an empty list
 
@@ -70,13 +71,13 @@ def find_domains(string_list):
 
 
     domains = []
-    domreg = "[a-z]+:\/\/\S+[a-z]"
+    domreg = "[a-z]+:\/\/[w\.]*(\S+[a-z])"
 
     for line in string_list:
-        check = re.search(domreg, line)
-        if check is not None:
-            transfer = check.group(0)
-            domains.append(transfer.split("//")[1])
+        check = re.findall(domreg, line)
+        if check != None:
+            for each in check:
+                domains.append(each)
     return domains    
     # initialize an empty list
 
